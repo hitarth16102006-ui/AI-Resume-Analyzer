@@ -13,11 +13,23 @@ app.set('trust proxy', 1);
 // Security headers
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
-  contentSecurityPolicy: false, // Disable for development, configure for production
+  contentSecurityPolicy: false,
 }));
 
 // CORS
 app.use(cors);
+
+// Handle CORS errors gracefully
+app.use((err, req, res, next) => {
+  if (err.message && err.message.includes('not allowed by CORS')) {
+    console.error(`[CORS] Rejected: origin=${req.headers.origin}, method=${req.method}, url=${req.originalUrl}`);
+    return res.status(403).json({
+      status: 'error',
+      message: 'CORS policy does not allow access from this origin.',
+    });
+  }
+  next(err);
+});
 
 // Logging
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
@@ -52,7 +64,7 @@ app.use((req, res) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  console.error('Error:', err.message || err);
   
   const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal Server Error';

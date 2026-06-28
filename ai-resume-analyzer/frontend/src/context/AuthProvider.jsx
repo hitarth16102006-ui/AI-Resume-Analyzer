@@ -28,12 +28,18 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const res = await authApi.login({ email, password })
+    if (!res.data?.token) {
+      throw new Error('No token received from server')
+    }
     localStorage.setItem('token', res.data.token)
     setUser(res.data.user)
   }
 
   const register = async (data) => {
     const res = await authApi.register(data)
+    if (!res.data?.token) {
+      throw new Error('No token received from server')
+    }
     localStorage.setItem('token', res.data.token)
     setUser(res.data.user)
   }

@@ -62,7 +62,14 @@ export default function AuthForm() {
       }
       navigate('/dashboard')
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Something went wrong')
+      console.error('[AuthForm] Error:', err)
+      if (err.code === 'ERR_NETWORK') {
+        toast.error('Cannot connect to server. Backend may be sleeping (Render free tier) or API URL is misconfigured.')
+      } else if (err.response) {
+        toast.error(err.response.data?.message || `Server error (${err.response.status})`)
+      } else {
+        toast.error(`Network error: ${err.message}. Check browser console for details.`)
+      }
     } finally {
       setLoading(false)
     }
