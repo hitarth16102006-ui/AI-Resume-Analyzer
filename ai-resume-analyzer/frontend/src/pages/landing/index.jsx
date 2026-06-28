@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   FiCpu, FiBarChart2, FiStar, FiArrowRight,
@@ -54,7 +55,20 @@ const faqs = [
 
 export default function Landing() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { user } = useAuth()
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById(location.state.scrollTo)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+      return () => clearTimeout(timer)
+    }
+  }, [location.state])
 
   return (
     <div>

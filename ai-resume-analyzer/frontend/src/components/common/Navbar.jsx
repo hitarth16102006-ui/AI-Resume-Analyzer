@@ -3,23 +3,18 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FiMenu, FiX, FiLogOut, FiFileText, FiGrid, FiChevronDown,
-  FiBell, FiUser, FiBarChart2, FiHome,
+  FiBell, FiUser, FiBarChart2, FiHome, FiStar, FiHelpCircle, FiDollarSign,
 } from 'react-icons/fi'
 import { useAuth } from '@hooks/useAuth'
 import { cn } from '@utils/cn'
 import Button from '@components/ui/Button'
 
-const guestLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/#features', label: 'Features' },
-  { to: '/pricing', label: 'Pricing' },
-  { to: '/#faq', label: 'FAQ' },
-]
-
-const userLinks = [
+const navLinks = [
   { to: '/', label: 'Home', icon: FiHome },
   { to: '/dashboard', label: 'Dashboard', icon: FiGrid },
-  { to: '/dashboard', label: 'Resumes', icon: FiFileText },
+  { to: '/pricing', label: 'Pricing', icon: FiDollarSign },
+  { to: '/#features', label: 'Features', icon: FiStar },
+  { to: '/#faq', label: 'FAQS', icon: FiHelpCircle },
 ]
 
 function NavLink({ to, label, icon: Icon, isActive, onClick }) {
@@ -92,13 +87,26 @@ export default function Navbar() {
     navigate('/')
   }, [logout, navigate])
 
+  const handleAnchorClick = useCallback((e, section) => {
+    e.preventDefault()
+    if (location.pathname === '/') {
+      const el = document.getElementById(section)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    } else {
+      navigate('/', { state: { scrollTo: section } })
+    }
+  }, [location.pathname, navigate])
+
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/'
-    if (path.startsWith('/#')) return false
+    if (path.startsWith('/#')) {
+      const section = path.replace('/#', '')
+      return location.pathname === '/' && location.hash === `#${section}`
+    }
     return location.pathname.startsWith(path)
   }
-
-  const links = user ? userLinks : guestLinks
 
   return (
     <motion.nav
@@ -124,15 +132,19 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden items-center gap-1 md:flex">
-            {links.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                label={link.label}
-                icon={link.icon}
-                isActive={isActive(link.to)}
-              />
-            ))}
+            {navLinks.map((link) => {
+              const section = link.to.startsWith('/#') ? link.to.replace('/#', '') : null
+              return (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  label={link.label}
+                  icon={link.icon}
+                  isActive={isActive(link.to)}
+                  onClick={section ? (e) => handleAnchorClick(e, section) : undefined}
+                />
+              )
+            })}
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
@@ -250,17 +262,22 @@ export default function Navbar() {
             className="border-t border-white/20 bg-white/90 backdrop-blur-xl shadow-soft overflow-hidden md:hidden"
           >
             <div className="space-y-1 px-4 py-3">
-              {links.map((link) => (
-                link.to.startsWith('/#') ? (
-                  <a
-                    key={link.to}
-                    href={link.to}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-dark-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                ) : (
+              {navLinks.map((link) => {
+                const section = link.to.startsWith('/#') ? link.to.replace('/#', '') : null
+                if (section) {
+                  return (
+                    <a
+                      key={link.to}
+                      href={link.to}
+                      onClick={(e) => { setIsOpen(false); handleAnchorClick(e, section) }}
+                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-dark-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                    >
+                      {link.icon && <link.icon className="h-4 w-4" />}
+                      {link.label}
+                    </a>
+                  )
+                }
+                return (
                   <Link
                     key={link.to}
                     to={link.to}
@@ -276,7 +293,7 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 )
-              ))}
+              })}
               <div className="border-t border-dark-100 pt-2 mt-2">
                 {user ? (
                   <>
