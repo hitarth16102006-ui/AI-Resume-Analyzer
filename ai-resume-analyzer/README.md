@@ -18,27 +18,84 @@
 
 ## Overview
 
-AI Resume Analyzer is a full-stack web application that helps job seekers optimize their resumes using artificial intelligence. Users upload their resumes (PDF or DOCX), and the platform leverages Google Gemini AI to perform comprehensive analysis including ATS compatibility scoring, grammar checking, formatting evaluation, keyword optimization, and personalized improvement suggestions.
+AI Resume Analyzer is a full-stack web application that helps job seekers optimize their resumes using artificial intelligence. This project demonstrates AI-assisted software development, full-stack engineering, authentication, API integration, resume parsing, ATS analysis, and secure backend practices. Users upload their resumes (PDF or DOCX), and the platform leverages Google Gemini AI to perform comprehensive analysis including ATS compatibility scoring, grammar checking, formatting evaluation, keyword optimization, and personalized improvement suggestions.
 
 ## Features
 
-- **AI Resume Analysis** — Deep analysis powered by Google Gemini AI across 10+ dimensions
-- **ATS Compatibility Score** — Evaluate how well your resume passes Applicant Tracking Systems
-- **Resume Parsing** — Automatic extraction of text from PDF and DOCX files
+### AI Features
+
+- **AI Resume Analysis** — Deep analysis powered by Google Gemini AI across 10+ dimensions including content, structure, and impact
+- **ATS Compatibility Score** — Evaluate how well your resume passes Applicant Tracking Systems with detailed breakdown
 - **Skills Detection** — Identify skills present in your resume automatically
-- **Missing Keywords** — Discover important keywords your resume is missing
+- **Missing Keywords** — Discover important keywords your resume is missing for better job matching
 - **Grammar & Spelling Check** — Catch errors and improve writing quality
 - **Formatting Evaluation** — Ensure professional layout and consistent styling
 - **Structure Analysis** — Evaluate section organization and content flow
 - **Readability Assessment** — Measure how easily your resume can be read
 - **Interview Readiness** — Assess preparedness based on resume content
-- **Personalized Suggestions** — Receive actionable improvement recommendations
-- **User Authentication** — Secure JWT-based registration and login
-- **Dashboard** — Central hub to manage all uploaded resumes and analysis results
-- **Detail Analysis View** — Deep dive into individual resume analysis with scores
-- **Responsive Design** — Fully responsive UI built with Tailwind CSS
-- **File Upload** — Drag-and-drop upload with support for PDF, DOC, DOCX
-- **Modern Animations** — Smooth transitions and animations powered by Framer Motion
+- **Personalized Suggestions** — Receive actionable improvement recommendations with priority fixes
+
+### User Features
+
+- **User Authentication** — Secure JWT-based registration and login with password hashing
+- **Dashboard** — Central hub to manage all uploaded resumes and view analysis results at a glance
+- **Detail Analysis View** — Deep dive into individual resume analysis with comprehensive scores
+- **Resume Upload** — Drag-and-drop file upload supporting PDF, DOC, and DOCX formats (max 10 MB)
+- **Resume Parsing** — Automatic text extraction from uploaded files using pdf-parse and Mammoth
+- **Responsive Design** — Fully responsive UI built with Tailwind CSS, works across devices
+- **Pricing Page** — View available plans and feature comparisons
+- **Demo Page** — Interactive walkthrough of the analysis process
+
+### Security Features
+
+- **JWT Authentication** — Stateless token-based authentication with Bearer scheme
+- **Password Hashing** — Passwords hashed with bcrypt (12 salt rounds)
+- **Input Validation** — All inputs validated and sanitized via express-validator
+- **File Validation** — Uploaded files checked for allowed MIME types and size limits
+- **Helmet** — HTTP security headers to protect against common web vulnerabilities
+- **CORS** — Cross-origin requests restricted to configured frontend URL
+- **Environment Variables** — Sensitive configuration isolated in environment variables
+
+### Developer Features
+
+- **Vite HMR** — Fast hot module replacement for rapid frontend development
+- **Nodemon** — Auto-reload for backend during development
+- **ESLint** — Code quality and consistency enforcement
+- **Prettier** — Automatic code formatting
+- **Path Aliases** — Clean imports using `@components/`, `@pages/`, `@hooks/`, etc.
+- **Custom Animations** — Tailwind CSS animations for blob, float, shimmer, and fade effects
+- **Soft Shadows** — Consistent shadow system for cards, modals, and glowing effects
+
+## Development Approach
+
+This project was built using **AI-assisted software development** — a modern workflow where I defined the architecture, requirements, and engineering decisions while leveraging AI tools to accelerate implementation. Key aspects of this approach include:
+
+- **Architecture & Planning** — I designed the system architecture, data models, API structure, component hierarchy, and authentication flow before writing code
+- **Prompt Engineering** — I crafted detailed prompts to generate initial implementations, specifying technology choices, error handling patterns, and code conventions
+- **Iterative Refinement** — I reviewed every block of generated code, refined it through multiple prompt iterations, and made manual adjustments for correctness and consistency
+- **Testing & Debugging** — I tested all functionality end-to-end, identified bugs, and resolved issues across the stack
+- **Integration** — I configured API connections, environment variables, CORS policies, database schemas, and AI model parameters
+- **Deployment** — I set up production hosting on Render (backend) and Vercel (frontend), configured environment variables, and resolved deployment-specific issues
+- **Version Control** — I managed the full Git workflow, including commits, branches, and documentation
+
+This represents an **AI-augmented engineering** workflow: I remain the decision-maker and quality gate at every step, using AI as a productivity multiplier rather than a replacement.
+
+## My Role
+
+- Product planning and feature definition
+- System architecture and component design
+- Prompt engineering and AI-assisted code generation
+- Frontend implementation (React, Tailwind CSS, Framer Motion)
+- Backend development (Express.js, Mongoose, REST API design)
+- Authentication system design and implementation (JWT, bcrypt)
+- Database schema design and MongoDB Atlas integration
+- Google Gemini AI model integration and prompt design
+- File upload pipeline (Multer, pdf-parse, Mammoth)
+- CORS configuration and security hardening
+- Testing, debugging, and issue resolution
+- Production deployment (Render + Vercel)
+- GitHub repository management
+- Documentation and README authoring
 
 ## Screenshots
 
@@ -57,6 +114,36 @@ AI Resume Analyzer is a full-stack web application that helps job seekers optimi
 ### Resume Analysis Detail
 
 *(Add screenshot here)*
+
+## Architecture
+
+The application follows a modern three-tier architecture with a clear separation of concerns.
+
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│   Browser   │────▶│  Express.js  │────▶│  MongoDB    │
+│  (React +   │     │   Backend    │     │   Atlas     │
+│   Vite)     │◀────│   (Render)   │◀────│             │
+└─────────────┘     └──────┬───────┘     └─────────────┘
+                           │
+                           ▼
+                    ┌──────────────┐
+                    │  Google AI   │
+                    │   Gemini     │
+                    └──────────────┘
+```
+
+**Frontend** — React single-page application built with Vite. Uses Tailwind CSS for styling, React Router for client-side routing, Framer Motion for animations, and Axios for HTTP communication. The frontend is deployed on Vercel and communicates with the backend via REST API calls.
+
+**Backend** — Express.js REST API server. Handles authentication (JWT), resume file uploads (Multer), text extraction (pdf-parse, Mammoth), AI analysis (Google Gemini), and serves data to the frontend. Deployed on Render with MongoDB Atlas as the database.
+
+**Database** — MongoDB Atlas cloud database with two collections: `users` (name, email, hashed password) and `resumes` (file metadata, extracted text, analysis results). Mongoose ODM provides schema validation and query building.
+
+**Authentication Flow** — Users register or login via the auth form. The backend validates credentials, issues a JWT token, and returns it to the frontend. The token is stored in localStorage and sent as a Bearer token in subsequent API requests. Backend middleware verifies the token on protected routes.
+
+**AI Integration** — When a user triggers analysis, the backend extracts text from the uploaded resume, sends it to Google Gemini AI with a structured prompt, parses the AI response, and stores the structured analysis results in the database.
+
+**File Upload Flow** — User selects a file via drag-and-drop. The frontend sends it as multipart/form-data to the backend. Multer validates the file type and size, saves it to the `uploads/` directory, and returns the file metadata. The text content is extracted asynchronously during analysis.
 
 ## Tech Stack
 
@@ -329,17 +416,33 @@ npm run preview
 7. **Detail View** — Deep dive into individual analysis with scores, strengths, weaknesses, missing keywords, formatting and grammar suggestions
 8. **Improvement Suggestions** — Receive actionable recommendations to optimize your resume
 
+## What I Learned
+
+- **Building scalable full-stack applications** — Structuring a project with separate frontend and backend, managing state across the stack, and designing for production deployment
+- **Working with AI APIs** — Integrating Google Gemini AI into a real application, designing effective prompts for structured output, and handling asynchronous AI processing
+- **Prompt engineering** — Crafting precise prompts that produce reliable, parseable responses for resume analysis across multiple dimensions
+- **Authentication and authorization** — Implementing JWT-based auth from scratch, securing routes with middleware, and managing token lifecycle on the client side
+- **REST API design** — Building clean, consistent API endpoints with proper HTTP methods, status codes, and error responses
+- **Document parsing** — Extracting text from PDF and DOCX files using specialized libraries, handling edge cases and unsupported formats
+- **Debugging AI-generated code** — Identifying issues introduced by AI suggestions, understanding the underlying code to fix them, and knowing when to rewrite versus refine
+- **Secure backend development** — Implementing Helmet, CORS, input validation, file upload restrictions, and environment variable isolation
+- **Deployment workflow** — Configuring production environments on Render and Vercel, managing environment variables across platforms, and debugging production-only issues like CORS misconfiguration
+- **Git and GitHub collaboration** — Managing commits, resolving merge conflicts, and maintaining clean project documentation
+
 ## Security
 
-- **Helmet** — HTTP security headers to protect against common web vulnerabilities
-- **CORS** — Cross-origin requests restricted to configured frontend URL
-- **JWT Authentication** — Stateless token-based authentication with Bearer scheme
-- **Password Hashing** — Passwords hashed with bcrypt (12 salt rounds)
-- **Input Validation** — All inputs validated and sanitized via express-validator
-- **File Validation** — Uploaded files checked for allowed MIME types and size limits
-- **Error Handling** — Centralized error handling with consistent JSON responses
-- **Environment Variables** — Sensitive configuration isolated in environment variables
-- **Trust Proxy** — Express configured to trust reverse proxy headers
+The application implements multiple layers of security following backend development best practices:
+
+- **JWT Authentication** — Stateless token-based authentication with Bearer scheme. Tokens are verified on every protected route request. Invalid or expired tokens are rejected with a 401 response.
+- **Password Hashing** — Passwords are hashed with bcrypt (12 salt rounds) before storage. The password field is excluded from query results by default using Mongoose's `select: false`.
+- **Helmet** — HTTP security headers configured to protect against XSS, content sniffing, clickjacking, and other common web vulnerabilities.
+- **CORS** — Cross-origin requests are restricted to the configured frontend URL. Unknown origins are logged and rejected with clear error messages.
+- **Input Validation** — All API inputs are validated and sanitized using express-validator with specific rules for email format, password length, name length, and MongoDB ID format.
+- **File Upload Validation** — Uploaded files are checked for allowed MIME types (PDF, DOC, DOCX) and size limits (10 MB maximum). Invalid files are rejected with descriptive error messages.
+- **Error Handling** — Centralized error handling middleware that consistently formats all errors as JSON responses with appropriate HTTP status codes. Sensitive stack traces are only exposed in development mode.
+- **Environment Variables** — All secrets and configuration (database URI, JWT secret, API keys) are isolated in environment variables and excluded from version control.
+- **Trust Proxy** — Express is configured to trust reverse proxy headers, enabling correct IP detection behind deployment platforms like Render.
+- **Cookie Parsing** — Cookie parser middleware is configured for future session management and secure cookie handling.
 
 ## Deployment
 
