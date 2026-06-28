@@ -101,19 +101,22 @@ This represents an **AI-augmented engineering** workflow: I remain the decision-
 
 ### Landing Page
 
-*(Add screenshot here)*
+<img width="1908" height="968" alt="image" src="https://github.com/user-attachments/assets/cf41b3a9-66c7-4898-840d-6d83367e14ca" />
+
 
 ### Authentication
+<img width="1916" height="960" alt="image" src="https://github.com/user-attachments/assets/32296d2d-cd51-4ba5-9d18-fe92d900f71b" />
 
-*(Add screenshot here)*
 
 ### Dashboard
 
-*(Add screenshot here)*
+<img width="1917" height="963" alt="image" src="https://github.com/user-attachments/assets/7a0380c0-52eb-4932-b67b-7d627cb982fb" />
+
 
 ### Resume Analysis Detail
 
-*(Add screenshot here)*
+<img width="1915" height="965" alt="image" src="https://github.com/user-attachments/assets/42d40af4-7ae3-4f16-9d40-f2027eb93007" />
+
 
 ## Architecture
 
